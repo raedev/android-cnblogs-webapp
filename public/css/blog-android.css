@@ -1,0 +1,192 @@
+/* Android 显示样式 */
+body {
+  background-color: #ffffff;
+  word-break: break-all !important;
+}
+a {
+  color: #409eff;
+}
+
+h1 {
+  font-size: 26px;
+}
+h2 {
+  font-size: 24px;
+}
+h3 {
+  font-size: 21px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 14px;
+}
+/* 引用段落 */
+blockquote {
+  line-height: 29px;
+  font-size: 16px;
+  display: block;
+  margin: 0;
+  padding: 0 0 0 0.84rem;
+  text-align: justify;
+  color: #666;
+  border-left: 6px solid #eee;
+  word-spacing: 5px;
+  word-break: break-word;
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+
+/* 文章容器 */
+.article {
+  padding: 1.2rem;
+}
+
+/* 文章标题 */
+.article .title {
+  font-family: 'font-title';
+  line-height: 1.5;
+  font-size: 28px;
+  color: #000000;
+  text-align: left;
+  font-weight: bolder;
+}
+
+/* 文章内容 */
+.article .content {
+  padding-top: 4px;
+  font-family: 'font-title';
+  font-size: 17px;
+  text-align: justify;
+  color: #404040;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.8 !important;
+  font-weight: 400;
+  word-break: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+/* 分割线 */
+.article .line {
+  background: #ddd;
+  height: 1px;
+}
+
+/* 作者 */
+.article .author {
+  font-family: 'font-tip';
+  align-items: center;
+  color: #404040;
+  font-size: 13px;
+  margin-bottom: 0.5066666666666667rem;
+  background: #f8f8f8;
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid #f1f1f1;
+}
+
+/* 代码块 */
+pre {
+  overflow-x: auto;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+/* 图片 */
+img {
+  width: 100%;
+}
+/* 代码块内容 */
+pre code {
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  padding: 2px 4px;
+  font-size: 14px !important;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+  white-space: pre !important;
+}
+
+/* 隐藏博客园折叠代码 */
+.code_img_closed,
+.code_img_opened,
+.cnblogs_code_collapse {
+  display: none;
+}
+
+/* 博客园的折叠代码默认显示 */
+.cnblogs_code_hide {
+  display: block;
+}
+
+/* 表格 */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+td,
+th {
+  padding: 0;
+}
+table {
+  background-color: transparent;
+}
+th {
+  text-align: left;
+}
+table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+}
+table > thead > tr > th,
+table > tbody > tr > th,
+table > tfoot > tr > th,
+table > thead > tr > td,
+table > tbody > tr > td,
+table > tfoot > tr > td {
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border-top: 1px solid #dddddd;
+}
+table > thead > tr > th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dddddd;
+}
+table > caption + thead > tr:first-child > th,
+table > colgroup + thead > tr:first-child > th,
+table > thead:first-child > tr:first-child > th,
+table > caption + thead > tr:first-child > td,
+table > colgroup + thead > tr:first-child > td,
+table > thead:first-child > tr:first-child > td {
+  border-top: 0;
+}
+table > tbody + tbody {
+  border-top: 2px solid #dddddd;
+}
+
+table-bordered {
+  border: 1px solid #dddddd;
+}
+table > thead > tr > th,
+table > tbody > tr > th,
+table > tfoot > tr > th,
+table > thead > tr > td,
+table > tbody > tr > td,
+table > tfoot > tr > td {
+  border: 1px solid #dddddd;
+}
+table > thead > tr > th,
+table > thead > tr > td {
+  border-bottom-width: 2px;
+}
