@@ -6,7 +6,9 @@
 
 /* eslint-disable no-console */
 
-import 'highlight.js/styles/atom-one-dark.css'
+// import 'highlight.js/styles/atom-one-dark.css'
+import 'highlight.js/styles/atom-one-light.css'
+// import 'highlight.js/styles/github.css'
 import hljs from 'highlight.js'
 import Android from './android'
 
@@ -15,7 +17,7 @@ export default {
   // 将文章内容转换为HTML
   parseHtml: function (text) {
     var content = document.createElement("div")
-    content.id = 'content_body'
+    content.id = 'content-body'
     content.innerHTML = text
     // Markdown 语法的高亮代码
     var codes = content.querySelectorAll('pre code')
@@ -61,13 +63,15 @@ export default {
     var doc = document.getElementById('content')
     if (!doc) return
     doc.addEventListener('DOMNodeInserted', (e) => {
-      e.target.querySelectorAll('img').forEach((img) => {
+      var imgs = e.target.querySelectorAll('img')
+      for (var index in imgs) {
+        var img = imgs[index]
         img.onclick = function (item) {
           // 图片点击
           $this.handleImageClickEvent(item.target)
           return false
         }
-      })
+      }
     })
   },
 
@@ -75,13 +79,13 @@ export default {
   handleImageClickEvent(e) {
     var src = e.src
     var urls = new Array()
-    var images = document.querySelectorAll('img')
+    var images = document.getElementById('content-body').querySelectorAll('img')
     for (var i in images) {
       var url = images[i].src
       if (url) urls.push(url)
     }
     var json = JSON.stringify(urls)
-    console.log(src, json)
+    // console.log(src, json)
     Android.onImageClick(src, json)
   },
 

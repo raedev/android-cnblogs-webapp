@@ -1,29 +1,31 @@
 /* Android 显示样式 */
+html,
 body {
   background-color: #ffffff;
   word-break: break-all !important;
+  scroll-behavior: smooth;
 }
 a {
   color: #409eff;
 }
 
 h1 {
-  font-size: 26px;
-}
-h2 {
   font-size: 24px;
 }
-h3 {
+h2 {
   font-size: 21px;
 }
-h4 {
+h3 {
   font-size: 18px;
 }
-h5 {
+h4 {
   font-size: 16px;
 }
-h6 {
+h5 {
   font-size: 14px;
+}
+h6 {
+  font-size: 12px;
 }
 /* 引用段落 */
 blockquote {
@@ -45,14 +47,16 @@ blockquote {
 
 /* 文章容器 */
 .article {
-  padding: 1.2rem;
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
+  padding-bottom: 80px;
 }
 
 /* 文章标题 */
 .article .title {
-  font-family: 'font-title';
+  /* font-family: 'font-title'; */
   line-height: 1.5;
-  font-size: 28px;
+  font-size: 24px;
   color: #000000;
   text-align: left;
   font-weight: bolder;
@@ -61,7 +65,7 @@ blockquote {
 /* 文章内容 */
 .article .content {
   padding-top: 4px;
-  font-family: 'font-title';
+  /* font-family: 'font-title'; */
   font-size: 17px;
   text-align: justify;
   color: #404040;
@@ -77,21 +81,30 @@ blockquote {
 
 /* 分割线 */
 .article .line {
-  background: #ddd;
-  height: 1px;
+  background: #f5f5f5;
+  height: 2px;
 }
 
 /* 作者 */
 .article .author {
-  font-family: 'font-tip';
+  /* font-family: 'font-tip'; */
   align-items: center;
   color: #404040;
   font-size: 13px;
   margin-bottom: 0.5066666666666667rem;
-  background: #f8f8f8;
-  padding: 6px;
-  border-radius: 6px;
-  border: 1px solid #f1f1f1;
+  background: #ffffff;
+  padding: 0px;
+  /* border-radius: 6px;
+  border: 1px solid #f1f1f1; */
+}
+.article .author-title {
+  font-size: 14px;
+  line-height: 4px;
+}
+.article .author .date {
+  font-size: 12px;
+  line-height: 8px;
+  color: #b1b1b1;
 }
 
 /* 代码块 */
@@ -99,6 +112,7 @@ pre {
   overflow-x: auto;
   margin-top: 5px;
   margin-bottom: 5px;
+  line-height: 1.6;
 }
 
 /* 图片 */
