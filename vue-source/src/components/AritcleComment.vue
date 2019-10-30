@@ -23,7 +23,7 @@
           </van-col>
           <van-col span="21"
                    class="anthor-box">
-            <div class="nickname">
+            <div class="name">
               {{item.name}}
               <span class="date">{{ item.date }}</span>
             </div>
@@ -156,7 +156,7 @@ export default {
       color: #8a9aa9;
       line-height: 1.2;
     }
-    .nickname {
+    .name {
       color: #8a9aa9;
       font-size: 13px;
     }
