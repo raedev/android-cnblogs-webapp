@@ -19,12 +19,20 @@
                        class="avatar"
                        width="2.4rem"
                        height="2.4rem"
-                       :src="item.avatar" />
+                       :src="item.author.avatar">
+              <template v-slot:loading>
+                <van-loading type="spinner"
+                             size="12" />
+              </template>
+              <template v-slot:error>
+                <img :src="avatarIcon" />
+              </template>
+            </van-image>
           </van-col>
           <van-col span="21"
                    class="anthor-box">
             <div class="name">
-              {{item.name}}
+              {{item.author.name}}
               <span class="date">{{ item.date }}</span>
             </div>
 
@@ -33,8 +41,8 @@
             <!-- 引用的回复 -->
             <div class="content quote"
                  v-if="item.quote">
-              <div class="quote-author">回复：{{ item.quoteBlogApp }}</div>
-              <div class="quote-content">{{ item.quote }}</div>
+              <div class="quote-author">回复：{{ item.quote.author.name }}</div>
+              <div class="quote-content">{{ item.quote.content }}</div>
             </div>
           </van-col>
         </van-row>
@@ -48,7 +56,7 @@
       <van-image height="140"
                  fit="contain"
                  :src="imageEmptyCommentPath" />
-      <i class="empty-text">暂无评论，客官请座</i>
+      <i class="empty-text">{{ errorMsg }}</i>
     </div>
 
   </div>
@@ -56,6 +64,7 @@
 
 <script>
 import imageEmptyComment from '@/assets/images/empty_comment.png'
+import avatarIcon from '@/assets/images/user_avatar.png'
 import Vue from 'vue';
 import { Row, Cell, Col, List, Image, Icon } from 'vant';
 import Android from '../android';
@@ -71,7 +80,8 @@ export default {
       finished: false,
       lockLoaidng: false, // 锁定加载状态
       imageEmptyCommentPath: imageEmptyComment,
-      errorMsg: '数据加载错误，请重试',
+      avatarIcon: avatarIcon,
+      errorMsg: '暂无评论，客官请座',
       comments: []
     }
   },
@@ -99,10 +109,11 @@ export default {
       }
 
       // 加载评论失败
-      webApp.onLoadCommentError = function () {
+      webApp.onLoadCommentError = function (msg) {
         $that.loadError = true
         $that.lockLoaidng = false
         $that.loading = false
+        $that.errorMsg = msg
       }
 
       // 加载评论成功

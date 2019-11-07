@@ -5,7 +5,7 @@
                  size="42px"
                  vertical
                  color="#1989fa">
-      <div class="loading-text">文章加载中，请稍后...</div>
+      <div class="loading-text">精彩即将呈现</div>
     </van-loading>
 
   </div>

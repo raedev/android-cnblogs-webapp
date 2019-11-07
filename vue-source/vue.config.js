@@ -1,6 +1,6 @@
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
     publicPath: '',
-    outputDir: '../library/assets',
+    outputDir: 'D:\\rae\\android-cnblogs-gitee\\module-article\\assets',
     productionSourceMap: false
 }

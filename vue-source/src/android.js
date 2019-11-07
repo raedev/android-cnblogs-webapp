@@ -10,9 +10,9 @@ export default {
   },
 
   // 获取博客
-  getBlog() {
+  getArticle() {
     if (!this.isApp()) return null
-    var text = window.cnblogsApp.getBlog()
+    var text = window.cnblogsApp.getArticle()
     return text ? JSON.parse(text) : null
   },
 
@@ -49,15 +49,15 @@ export default {
   },
 
   // 主页点击
-  onAuthorHomeClick(blogApp) {
+  onAuthorHomeClick(author) {
     if (!this.isApp()) return
-    window.cnblogsApp.onAuthorHomeClick(blogApp)
+    window.cnblogsApp.onAuthorHomeClick(JSON.stringify(author))
   },
 
   // 点赞
-  handleLikeClick() {
+  handleLikeClick(isLike) {
     if (!this.isApp()) return
-    window.cnblogsApp.onLikeClick()
+    window.cnblogsApp.onLikeClick(isLike + '')
   },
 
   // 点击评论
@@ -72,5 +72,3 @@ export default {
     window.cnblogsApp.close()
   }
 }
-
-

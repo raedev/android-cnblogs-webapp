@@ -13,11 +13,19 @@
                      @click="handleAuthorHome"
                      width="2.4rem"
                      height="2.4rem"
-                     :src="model.avatar" />
+                     :src="model.author.avatar">
+            <template v-slot:loading>
+              <van-loading type="spinner"
+                           size="12" />
+            </template>
+            <template v-slot:error>
+              <img :src="avatarIcon" />
+            </template>
+          </van-image>
         </van-col>
         <van-col span="12"
                  @click="handleAuthorHome">
-          <p class="author-title">{{ model.author }}</p>
+          <p class="author-title">{{ model.author.name }}</p>
           <p class="date">{{ model.date }}</p>
         </van-col>
         <van-col span="8"
@@ -46,7 +54,7 @@
 
         <!-- 点赞区 -->
         <van-button round
-                    icon="good-job"
+                    :icon="isLike?'smile':'good-job'"
                     class="recommend"
                     color="#ffd100"
                     :loading="likeLoading"
@@ -55,7 +63,8 @@
           {{ isLike ? '感谢推荐':'推荐' }}
         </van-button>
 
-        <i class="tips">文章写得还不错，给个鼓励吧</i>
+        <i class="tips"
+           v-if="!isLike">文章写得还不错，给个鼓励吧</i>
 
       </div>
 
@@ -65,12 +74,12 @@
     <!-- 上一篇 下一篇 -->
     <div class="diagg"
          v-if="nextArticles.length>0">
-      <div class="title">推荐阅读</div>
+      <div class="title">下一篇文章</div>
       <div v-for="(item,key) in nextArticles"
            :key="key"
            class="article-next"
            @click="handleArticleClick(item)">
-        <div class="article-next-title">{{ item.name }} </div>
+        <div class="article-next-title">{{ item.title }} </div>
         <div class="article-next-date">{{ item.date }}</div>
       </div>
     </div>
@@ -79,12 +88,12 @@
     <!-- 推荐区 -->
     <div class="diagg"
          v-if="nextArticles.length>0">
-      <div class="title">猜你喜欢</div>
+      <div class="title">相关文章</div>
       <div v-for="(item,key) in recommendArticles"
            :key="key"
            class="article-next"
            @click="handleArticleClick(item)">
-        <div class="article-next-title">{{ item.name }} </div>
+        <div class="article-next-title">{{ item.title }} </div>
         <div class="article-next-date">{{ item.date }}</div>
       </div>
     </div>
@@ -99,6 +108,7 @@
 
 <script>
 
+import avatarIcon from '@/assets/images/user_avatar.png'
 import Vue from 'vue';
 import axios from 'axios';
 import { Row, Col, Loading, Image, Button, Icon } from 'vant';
@@ -117,9 +127,11 @@ export default {
       likeAnmin: true, // 点赞动画
       likeLoading: false, // 点赞加载状态
       model: {
-        title: '博客园',
-        content: null
+        title: '',
+        content: null,
+        author: {}
       },
+      avatarIcon: avatarIcon,
       nextArticles: [], // 下一篇文章
       recommendArticles: [] // 推荐文章
     }
@@ -127,7 +139,6 @@ export default {
   mounted() {
     // 初始化
     this.initAndroidObject()
-    // 加载数据
     if (Android.isApp())
       this.loadData()
     else
@@ -156,10 +167,14 @@ export default {
         $that.likeLoading = false
         $that.isLike = true
       }
+
+      webApp.onLikeError = () => {
+        $that.likeLoading = false
+      }
     },
     loadData() {
       // 加载博客
-      this.model = Android.getBlog()
+      this.model = Android.getArticle()
       if (this.model != null) {
         document.title = this.model.title
         this.model.content = Article.parseHtml(this.model.content)
@@ -194,7 +209,7 @@ export default {
     },
     // 进入主页
     handleAuthorHome() {
-      Android.onAuthorHomeClick(this.model.blogApp);
+      Android.onAuthorHomeClick(this.model.author);
     },
 
     // 文章点击
@@ -205,13 +220,16 @@ export default {
     // 点赞
     handleLikeClick() {
       this.likeLoading = true
-      Android.handleLikeClick()
+      Android.handleLikeClick(true)
     }
   }
 }
 </script>
 
 <style  scoped>
+.container {
+  padding-bottom: 40px;
+}
 .article-loading {
   margin-top: 240px;
 }
