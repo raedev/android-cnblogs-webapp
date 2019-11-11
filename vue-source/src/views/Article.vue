@@ -1,5 +1,6 @@
 <template>
-  <div class="container">
+  <div v-if="model.content"
+       class="container">
     <!-- 文章区 -->
     <div class="article">
       <!-- 标题 -->
@@ -14,10 +15,6 @@
                      width="2.4rem"
                      height="2.4rem"
                      :src="model.author.avatar">
-            <template v-slot:loading>
-              <van-loading type="spinner"
-                           size="12" />
-            </template>
             <template v-slot:error>
               <img :src="avatarIcon" />
             </template>
@@ -26,7 +23,7 @@
         <van-col span="12"
                  @click="handleAuthorHome">
           <p class="author-title">{{ model.author.name }}</p>
-          <p class="date">{{ model.date }}</p>
+          <p class="date">{{ model.viewCount }} 次阅读 {{ model.date }}</p>
         </van-col>
         <van-col span="8"
                  style="text-align: right">
@@ -70,7 +67,9 @@
 
     </div>
 
-    <div class="space"></div>
+    <div id="scrollSpace"
+         class="space"></div>
+
     <!-- 上一篇 下一篇 -->
     <div class="diagg"
          v-if="nextArticles.length>0">
@@ -104,13 +103,22 @@
     <comment />
 
   </div>
+
+  <div v-else
+       class="container">
+    <van-loading class="article-loading"
+                 size="32px"
+                 vertical
+                 color="#1989fa">
+      <div class="loading-text">精彩即将呈现</div>
+    </van-loading>
+  </div>
 </template>
 
 <script>
 
 import avatarIcon from '@/assets/images/user_avatar.png'
 import Vue from 'vue';
-import axios from 'axios';
 import { Row, Col, Loading, Image, Button, Icon } from 'vant';
 import Comment from '../components/AritcleComment'
 import Article from '../article'
@@ -124,7 +132,6 @@ export default {
   data() {
     return {
       isLike: false, // 是否已推荐
-      likeAnmin: true, // 点赞动画
       likeLoading: false, // 点赞加载状态
       model: {
         title: '',
@@ -139,10 +146,12 @@ export default {
   mounted() {
     // 初始化
     this.initAndroidObject()
-    if (Android.isApp())
+    if (Android.isApp()) {
       this.loadData()
-    else
+    }
+    else {
       this.loadTestData()
+    }
   },
   methods: {
 
@@ -158,6 +167,25 @@ export default {
       webApp.onLoadData = function () {
         this.loadData()
       }
+
+      // 加载下一篇文章数据
+      webApp.onLoadNextArticles = () => {
+        this.loadNextArticles()
+      }
+
+      // 滚动到评论位置
+      webApp.scrollToComment = function () {
+        var comment = document.querySelector('#comment')
+        window.scrollTo(0, comment.offsetTop)
+      }
+
+      // 滚动到头部
+      webApp.scrollToTop = () => {
+        var link = document.createElement('a')
+        link.href = '#title'
+        link.click()
+      }
+
       // 设置字体大小
       webApp.setFontSize = function () {
 
@@ -174,12 +202,17 @@ export default {
     },
     loadData() {
       // 加载博客
-      this.model = Android.getArticle()
-      if (this.model != null) {
-        document.title = this.model.title
-        this.model.content = Article.parseHtml(this.model.content)
+      var article = Android.getArticle()
+      if (article != null) {
+        document.title = article.title
+        this.isLike = article.isLike
+        article.content = Article.parseHtml(article.content)
       }
-      // 加载上一篇文章
+      this.model = article
+      this.loadNextArticles()
+    },
+    // 加载下一篇文章
+    loadNextArticles() {
       var articles = Android.getNextArticle()
       for (var index in articles) {
         var article = articles[index]
@@ -189,23 +222,6 @@ export default {
           this.recommendArticles.push(article)
         }
       }
-    },
-    // 测试数据
-    loadTestData() {
-      var blogId = '11558268' // 11532708 11558268
-      const service = axios.create({
-        timeout: 15000
-      })
-      service({
-        url: 'http://192.168.10.145:8085/test/blog?id=' + blogId,
-        method: 'GET'
-      }).then(response => {
-        this.model.title = '第809期 | 为什么会有大颠覆时代？'
-        this.model.date = '12分钟前'
-        this.model.author = '千与千寻'
-        this.model.avatar = 'https://piccdn.igetget.com/img/201807/19/201807191556587359037523.jpg@100w_100h'
-        this.model.content = Article.parseHtml(response.data.content)
-      })
     },
     // 进入主页
     handleAuthorHome() {
@@ -232,6 +248,9 @@ export default {
 }
 .article-loading {
   margin-top: 240px;
+}
+.loading-text {
+  margin-top: 24px;
 }
 .author-button {
   color: #b1b1b1;

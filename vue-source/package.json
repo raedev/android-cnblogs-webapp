@@ -10,17 +10,16 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "highlight.js": "^9.15.10",
-    "vant": "^2.2.0",
+    "vant": "^2.2.12",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.11.0",
-    "@vue/cli-plugin-eslint": "^3.11.0",
-    "@vue/cli-service": "^3.11.0",
-    "axios": "^0.19.0",
+    "@vue/cli-plugin-babel": "^3.12.1",
+    "@vue/cli-plugin-eslint": "^3.12.1",
+    "@vue/cli-service": "^3.12.1",
     "babel-eslint": "^10.0.1",
-    "babel-plugin-import": "^1.12.1",
+    "babel-plugin-import": "^1.12.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "less": "^3.10.3",

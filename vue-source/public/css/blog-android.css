@@ -3,7 +3,6 @@ html,
 body {
   background-color: #ffffff;
   word-break: break-all !important;
-  scroll-behavior: smooth;
 }
 a {
   color: #409eff;

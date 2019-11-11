@@ -2,7 +2,7 @@
   <div class="container">
 
     <van-loading class="article-loading"
-                 size="42px"
+                 size="32px"
                  vertical
                  color="#1989fa">
       <div class="loading-text">精彩即将呈现</div>

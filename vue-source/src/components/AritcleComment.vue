@@ -11,14 +11,14 @@
               v-if="comments.length>0"
               @load="onLoad">
       <van-cell v-for="(item, key) in comments"
-                :key="key"
-                @click="handleItemClick(item)">
+                :key="key">
         <van-row>
           <van-col span="3">
             <van-image round
                        class="avatar"
                        width="2.4rem"
                        height="2.4rem"
+                       @click="handleAvatarClick(item.author)"
                        :src="item.author.avatar">
               <template v-slot:loading>
                 <van-loading type="spinner"
@@ -36,7 +36,8 @@
               <span class="date">{{ item.date }}</span>
             </div>
 
-            <div class="content">{{ item.content }}</div>
+            <div class="content"
+                 @click="handleItemClick(item)">{{ item.content }}</div>
 
             <!-- 引用的回复 -->
             <div class="content quote"
@@ -52,11 +53,11 @@
     <!-- 评论为空 -->
     <div class="comment-empty"
          v-else
-         @click="handleItemClick">
+         @click="handleItemClick(null)">
       <van-image height="140"
                  fit="contain"
                  :src="imageEmptyCommentPath" />
-      <i class="empty-text">{{ errorMsg }}</i>
+      <i class="empty-text">{{ loading ? '加载精彩评论中，请稍后..' : errorMsg }}</i>
     </div>
 
   </div>
@@ -101,12 +102,6 @@ export default {
       var webApp = window.webapp || {}
       let $that = this
 
-      // 滚动到评论位置
-      webApp.scrollToComment = function () {
-        var link = document.createElement('a')
-        link.href = '#comment'
-        link.click()
-      }
 
       // 加载评论失败
       webApp.onLoadCommentError = function (msg) {
@@ -135,12 +130,19 @@ export default {
     onLoad() {
       if (this.lockLoaidng) return
       this.lockLoaidng = true
+      this.loading = true
       Android.onLoadCommentClick(this.pageIndex)
     },
 
     // 评论点击
     handleItemClick(item) {
       Android.onCommentClick(item ? JSON.stringify(item) : null)
+    },
+
+    // 头像点击
+    handleAvatarClick(author) {
+      Android.onAuthorHomeClick(author)
+      return false
     }
   }
 }
@@ -151,6 +153,7 @@ export default {
   padding-left: 1.2rem;
   padding-right: 1.2rem;
   padding-bottom: 2rem;
+  scroll-behavior: smooth;
   .title {
     font-size: 16px;
     font-weight: bold;

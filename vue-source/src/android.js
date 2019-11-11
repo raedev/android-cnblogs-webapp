@@ -13,7 +13,8 @@ export default {
   getArticle() {
     if (!this.isApp()) return null
     var text = window.cnblogsApp.getArticle()
-    return text ? JSON.parse(text) : null
+    var article = text ? JSON.parse(text) : null
+    return article
   },
 
   // 获取下一篇文章
