@@ -9,13 +9,6 @@ export default new Router({
       path: '/',
       name: 'Article',
       component: () => import('./views/Article.vue')
-    },
-    // {
-    //   // 过渡页，让用户视觉过渡更加自然
-    //   path: '/',
-    //   name: 'Launcher',
-    //   component: () => import('./views/Launcher.vue')
-    // }
-
+    }
   ]
 })

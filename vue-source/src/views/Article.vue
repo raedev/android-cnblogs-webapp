@@ -1,5 +1,15 @@
 <template>
-  <div v-if="model.content"
+  <div v-if="!isDataReady"
+       class="container">
+    <van-loading class="article-loading"
+                 size="32px"
+                 vertical
+                 color="#1989fa">
+      <div class="loading-text">精彩即将呈现..</div>
+    </van-loading>
+  </div>
+
+  <div v-else
        class="container">
     <!-- 文章区 -->
     <div class="article">
@@ -14,11 +24,7 @@
                      @click="handleAuthorHome"
                      width="2.4rem"
                      height="2.4rem"
-                     :src="model.author.avatar">
-            <template v-slot:error>
-              <img :src="avatarIcon" />
-            </template>
-          </van-image>
+                     :src="model.author.avatar" />
         </van-col>
         <van-col span="12"
                  @click="handleAuthorHome">
@@ -43,28 +49,24 @@
 
       <!-- 内容区 -->
       <div class="content">
-
         <!-- 内容实体 -->
         <div id="content"
-             v-html="model.content">
-        </div>
+             v-html="model.content"></div>
 
         <!-- 点赞区 -->
         <van-button round
-                    :icon="isLike?'smile':'good-job'"
+                    :icon="isLike ? 'smile' : 'good-job'"
                     class="recommend"
                     color="#ffd100"
                     :loading="likeLoading"
-                    :disabled="isLike"
+                    :disabled="isDataReady && isLike"
                     @click="handleLikeClick">
-          {{ isLike ? '感谢推荐':'推荐' }}
+          {{ isLike ? "感谢推荐" : "推荐" }}
         </van-button>
 
         <i class="tips"
            v-if="!isLike">文章写得还不错，给个鼓励吧</i>
-
       </div>
-
     </div>
 
     <div id="scrollSpace"
@@ -72,13 +74,13 @@
 
     <!-- 上一篇 下一篇 -->
     <div class="diagg"
-         v-if="nextArticles.length>0">
+         v-if="nextArticles.length > 0">
       <div class="title">下一篇文章</div>
-      <div v-for="(item,key) in nextArticles"
+      <div v-for="(item, key) in nextArticles"
            :key="key"
            class="article-next"
            @click="handleArticleClick(item)">
-        <div class="article-next-title">{{ item.title }} </div>
+        <div class="article-next-title">{{ item.title }}</div>
         <div class="article-next-date">{{ item.date }}</div>
       </div>
     </div>
@@ -86,13 +88,13 @@
     <div class="space"></div>
     <!-- 推荐区 -->
     <div class="diagg"
-         v-if="nextArticles.length>0">
+         v-if="nextArticles.length > 0">
       <div class="title">相关文章</div>
-      <div v-for="(item,key) in recommendArticles"
+      <div v-for="(item, key) in recommendArticles"
            :key="key"
            class="article-next"
            @click="handleArticleClick(item)">
-        <div class="article-next-title">{{ item.title }} </div>
+        <div class="article-next-title">{{ item.title }}</div>
         <div class="article-next-date">{{ item.date }}</div>
       </div>
     </div>
@@ -101,125 +103,121 @@
 
     <!-- 评论区 -->
     <comment />
-
-  </div>
-
-  <div v-else
-       class="container">
-    <van-loading class="article-loading"
-                 size="32px"
-                 vertical
-                 color="#1989fa">
-      <div class="loading-text">精彩即将呈现</div>
-    </van-loading>
   </div>
 </template>
 
 <script>
-
-import avatarIcon from '@/assets/images/user_avatar.png'
-import Vue from 'vue';
-import { Row, Col, Loading, Image, Button, Icon } from 'vant';
-import Comment from '../components/AritcleComment'
-import Article from '../article'
-import Android from '../android'
-Vue.use(Row).use(Col).use(Loading).use(Image).use(Button).use(Icon);
-
+import Vue from "vue";
+import { Row, Col, Loading, Image, Button, Icon } from "vant";
+import Comment from "../components/AritcleComment";
+import Article from "../article";
+import Android from "../android";
+import { log } from 'util';
+Vue.use(Row)
+  .use(Col)
+  .use(Loading)
+  .use(Image)
+  .use(Button)
+  .use(Icon);
 
 export default {
-  name: 'home',
+  name: "home",
   components: { Comment },
   data() {
     return {
+      isDataReady: false, // 第一次数据是否创建好了
       isLike: false, // 是否已推荐
       likeLoading: false, // 点赞加载状态
       model: {
-        title: '',
+        title: "",
         content: null,
         author: {}
       },
-      avatarIcon: avatarIcon,
       nextArticles: [], // 下一篇文章
       recommendArticles: [] // 推荐文章
-    }
+    };
   },
   mounted() {
-    // 初始化
-    this.initAndroidObject()
+    this.initAndroidObject();
+  },
+  created() {
     if (Android.isApp()) {
-      this.loadData()
+      this.loadData();
     }
-    else {
-      this.loadTestData()
-    }
+
   },
   methods: {
-
     /*
     |------------------------------------
     | Android 调用WEB接口
     |------------------------------------
     */
     initAndroidObject() {
-      let $that = this
-      var webApp = window.webapp || {}
+      let $that = this;
+      var webApp = window.webapp || {};
       // 加载数据
       webApp.onLoadData = function () {
-        this.loadData()
-      }
+        // 避免多次回调
+        if (!$that.isDataReady) {
+          $that.loadData();
+        }
+      };
 
       // 加载下一篇文章数据
       webApp.onLoadNextArticles = () => {
-        this.loadNextArticles()
-      }
+        $that.loadNextArticles();
+      };
 
       // 滚动到评论位置
       webApp.scrollToComment = function () {
-        var comment = document.querySelector('#comment')
-        window.scrollTo(0, comment.offsetTop)
-      }
+        var comment = document.querySelector("#comment");
+        window.scrollTo(0, comment.offsetTop);
+      };
 
       // 滚动到头部
       webApp.scrollToTop = () => {
-        var link = document.createElement('a')
-        link.href = '#title'
-        link.click()
-      }
+        var title = document.querySelector("#title");
+        window.scrollTo(0, title.offsetTop);
+      };
 
       // 设置字体大小
-      webApp.setFontSize = function () {
-
-      }
+      webApp.setFontSize = function () { };
       // 点赞成功
       webApp.onLikeFinish = function () {
-        $that.likeLoading = false
-        $that.isLike = true
-      }
+        $that.likeLoading = false;
+        $that.isLike = true;
+      };
 
       webApp.onLikeError = () => {
-        $that.likeLoading = false
-      }
+        $that.likeLoading = false;
+      };
     },
     loadData() {
       // 加载博客
-      var article = Android.getArticle()
-      if (article != null) {
-        document.title = article.title
-        this.isLike = article.isLike
-        article.content = Article.parseHtml(article.content)
+      try {
+        var article = Android.getArticle();
+        if (article != null) {
+          document.title = article.title;
+          this.isLike = article.isLike;
+          article.content = Article.parseHtml(article.content);
+          this.model = article
+          log('解析文章内容完成..')
+        }
+        this.loadNextArticles();
+      } catch (e) {
+        this.model.content = '加载文章错误:' + e
       }
-      this.model = article
-      this.loadNextArticles()
+      this.isDataReady = true // 第一次数据准备好了
     },
     // 加载下一篇文章
     loadNextArticles() {
-      var articles = Android.getNextArticle()
+      var articles = Android.getNextArticle();
       for (var index in articles) {
-        var article = articles[index]
+        var article = articles[index];
         if (article.date) {
-          this.nextArticles.push(article)
+          this.nextArticles.push(article);
         } else {
-          this.recommendArticles.push(article)
+          this.recommendArticles.push(article);
         }
       }
     },
@@ -230,19 +228,19 @@ export default {
 
     // 文章点击
     handleArticleClick(item) {
-      Android.onArticleClick(item)
+      Android.onArticleClick(item);
     },
 
     // 点赞
     handleLikeClick() {
-      this.likeLoading = true
-      Android.handleLikeClick(true)
+      this.likeLoading = true;
+      Android.handleLikeClick(true);
     }
   }
-}
+};
 </script>
 
-<style  scoped>
+<style scoped>
 .container {
   padding-bottom: 40px;
 }

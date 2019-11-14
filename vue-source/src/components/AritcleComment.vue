@@ -24,9 +24,6 @@
                 <van-loading type="spinner"
                              size="12" />
               </template>
-              <template v-slot:error>
-                <img :src="avatarIcon" />
-              </template>
             </van-image>
           </van-col>
           <van-col span="21"
@@ -65,7 +62,6 @@
 
 <script>
 import imageEmptyComment from '@/assets/images/empty_comment.png'
-import avatarIcon from '@/assets/images/user_avatar.png'
 import Vue from 'vue';
 import { Row, Cell, Col, List, Image, Icon } from 'vant';
 import Android from '../android';
@@ -81,7 +77,6 @@ export default {
       finished: false,
       lockLoaidng: false, // 锁定加载状态
       imageEmptyCommentPath: imageEmptyComment,
-      avatarIcon: avatarIcon,
       errorMsg: '暂无评论，客官请座',
       comments: []
     }
